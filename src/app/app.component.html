@@ -1,17 +1,177 @@
-<section class="lesson">
-  <p class="lesson__eyebrow">LESSON 5 OF 12</p>
-  <h2 class="lesson__title">Test &amp; Test</h2>
-  <p class="lesson__lead">
-   Test Lorem ipsum dolor sit amet  adipisicing elit. Odio, enim quas? Veritatis, at animi? Consequuntur placeat quae eveniet consectetur quidem blanditiis pariatur animi ex delectus, deserunt dolores cum est inventore?
-  </p>
+<div class="lesson">
 
-  <div class="lesson__meta">
-    <span>~15 min</span>
-    <span>Beginner</span>
-    <span class="lesson__xp">+40 XP</span>
-  </div>
+  <!-- ── Sidebar ─────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <button class="sidebar__back" type="button">
+      <span aria-hidden="true">&#8592;</span> Back to overview
+    </button>
 
-  <p class="lesson__origin">
-    Angular remote &middot; mounted at runtime by the React shell
-  </p>
-</section>
+    <p class="sidebar__eyebrow">
+      Lesson {{ lessonNumber }} of {{ lessonTotal }}
+    </p>
+    <h1 class="sidebar__title">{{ title }}</h1>
+
+    <!-- On mobile this becomes a tap-to-expand accordion -->
+    <button
+      class="sidebar__brief-toggle"
+      type="button"
+      [attr.aria-expanded]="briefOpen"
+      (click)="toggleBrief()"
+    >
+      Read the brief
+      <span class="sidebar__chevron" [class.is-open]="briefOpen" aria-hidden="true">&#9662;</span>
+    </button>
+
+    <div class="sidebar__brief" [class.is-open]="briefOpen">
+      <p class="sidebar__brief-label">Brief</p>
+      <p class="sidebar__brief-text">{{ brief }}</p>
+    </div>
+
+    <dl class="sidebar__meta">
+      <div class="sidebar__meta-row">
+        <dt>Time</dt>
+        <dd>{{ duration }}</dd>
+      </div>
+      <div class="sidebar__meta-row">
+        <dt>Level</dt>
+        <dd>{{ level }}</dd>
+      </div>
+      <div class="sidebar__meta-row">
+        <dt>XP</dt>
+        <dd class="sidebar__xp">+{{ xp }}</dd>
+      </div>
+    </dl>
+
+    <div class="sidebar__progress">
+      <p class="sidebar__progress-label">Course {{ courseProgress }}% complete</p>
+      <div class="progressbar" role="progressbar"
+           [attr.aria-valuenow]="courseProgress" aria-valuemin="0" aria-valuemax="100">
+        <span class="progressbar__fill" [style.width.%]="courseProgress"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ────────────────────────────────────────────────── -->
+  <main class="content">
+
+    <header class="content__head">
+      <h2 class="content__heading">The lesson</h2>
+      <div class="content__nav">
+        <button class="btn btn--ghost" type="button">
+          <span aria-hidden="true">&#8592;</span> Prev
+        </button>
+        <button class="btn btn--primary" type="button">
+          Next <span aria-hidden="true">&#8594;</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 1 · The concept -->
+    <section class="step">
+      <div class="step__head">
+        <span class="step__num step__num--one">1</span>
+        <h3 class="step__title">The concept</h3>
+      </div>
+
+      <div class="video">
+        <span class="video__play" aria-hidden="true">&#9654;</span>
+        <span class="video__label">Watch: components in 3 min</span>
+      </div>
+
+      <p class="step__body">
+        A component is a function that returns markup.
+        <code class="chip">props</code>
+        are its inputs — pass them like attributes and read them inside.
+      </p>
+    </section>
+
+    <!-- 2 · How & where it's used -->
+    <section class="step">
+      <div class="step__head">
+        <span class="step__num step__num--two">2</span>
+        <h3 class="step__title">How &amp; where it's used in this app</h3>
+      </div>
+
+      <div class="usage">
+        <figure class="code">
+          <figcaption class="code__path">src/components/CourseCard.jsx</figcaption>
+          <pre class="code__body"><span class="tok-kw">const</span> <span class="tok-fn">CourseCard</span> = (<span class="tok-punc">&#123;</span> title, progress <span class="tok-punc">&#125;</span>) =&gt; (
+  &lt;<span class="tok-tag">div</span> <span class="tok-attr">className</span>=<span class="tok-str">"card"</span>&gt;<span class="tok-punc">&#123;</span>title<span class="tok-punc">&#125;</span>&lt;/<span class="tok-tag">div</span>&gt;
+);</pre>
+        </figure>
+
+        <aside class="appears">
+          <p class="appears__label">Where it appears</p>
+          <ul class="appears__list">
+            <li *ngFor="let place of appearsIn; let i = index"
+                class="appears__item"
+                [class.appears__item--a]="i % 3 === 0"
+                [class.appears__item--b]="i % 3 === 1"
+                [class.appears__item--c]="i % 3 === 2">
+              {{ place }}
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 3 · Tasks -->
+    <section class="step">
+      <div class="step__head">
+        <span class="step__num step__num--three">3</span>
+        <h3 class="step__title">Complete to finish</h3>
+        <span class="step__count">{{ doneCount }} / {{ tasks.length }} tasks</span>
+      </div>
+
+      <ul class="tasks">
+        <li *ngFor="let task of tasks">
+          <button
+            class="task"
+            type="button"
+            [class.task--done]="task.done"
+            [class.task--exercise]="task.isExercise"
+            [attr.aria-pressed]="task.done"
+            (click)="toggleTask(task)"
+          >
+            <span class="task__id">{{ task.id }}</span>
+            <span class="task__question">
+              {{ task.question }}
+              <code class="chip chip--code" *ngIf="task.code">{{ task.code }}</code>
+              <ng-container *ngIf="task.isExercise"> component</ng-container>
+            </span>
+            <span class="task__mark" aria-hidden="true">
+              <ng-container *ngIf="task.done">&#10003;</ng-container>
+            </span>
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Footer bar -->
+    <footer class="content__foot">
+      <p class="content__hint" [class.is-ready]="allDone">
+        <ng-container *ngIf="!allDone">
+          Answer all {{ tasks.length }} to unlock the next lesson
+        </ng-container>
+        <ng-container *ngIf="allDone && !completed">
+          All tasks answered — you can complete the lesson
+        </ng-container>
+        <ng-container *ngIf="completed">
+          Lesson complete · +{{ xp }} XP
+        </ng-container>
+      </p>
+
+      <button
+        class="btn btn--complete"
+        type="button"
+        [disabled]="!allDone || completed"
+        (click)="markComplete()"
+      >
+        <span aria-hidden="true">&#10003;</span>
+        {{ completed ? 'Completed' : 'Mark complete' }}
+      </button>
+    </footer>
+
+    <p class="origin">Angular remote &middot; mounted at runtime by the React shell</p>
+  </main>
+</div>

@@ -5,7 +5,7 @@ module.exports = withModuleFederationPlugin({
   name: 'amor-lineribus-angular',
 
   exposes: {
-    './Component': './src/app/app.component.ts',
+    './Mount': './src/app/mount.ts',
   },
 
   shared: {

@@ -1,15 +1,31 @@
-const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+const { shareAll } = require('@angular-architects/module-federation/webpack');
+const { ModuleFederationPlugin } = require('webpack').container;
 
-module.exports = withModuleFederationPlugin({
-
-  name: 'amor-lineribus-angular',
-
-  exposes: {
-    './Mount': './src/app/mount.ts',
+module.exports = {
+  output: {
+    uniqueName: 'amorLineribusAngular',
+    publicPath: 'http://localhost:4201/',
+    scriptType: 'text/javascript',
   },
-
-  shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  optimization: {
+    runtimeChunk: false,
   },
-
-});
+  experiments: {
+    outputModule: false,
+  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'amorLineribusAngular',
+      filename: 'remoteEntry.js',
+      library: { type: 'var', name: 'amorLineribusAngular' },
+      exposes: {
+        './Mount': './src/app/mount.ts',
+      },
+      shared: shareAll({
+        singleton: true,
+        strictVersion: false,
+        requiredVersion: 'auto',
+      }),
+    }),
+  ],
+};

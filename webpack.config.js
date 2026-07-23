@@ -2,16 +2,16 @@ const { shareAll } = require('@angular-architects/module-federation/webpack');
 const { ModuleFederationPlugin } = require('webpack').container;
 
 /**
- * Production federation config for the Angular remote.
+ * Development federation config for the Angular remote.
  *
- * Identical to webpack.config.js except for publicPath, which must point at
- * the GitHub Pages location so the remote's own lazy chunks resolve when the
- * shell loads it from a different path.
+ * Identical to webpack.prod.config.js except for publicPath, which points
+ * at the local dev server so the remote's own lazy chunks resolve when the
+ * shell loads it from localhost:3000.
  */
 module.exports = {
   output: {
     uniqueName: 'amorLineribusAngular',
-    publicPath: 'https://soulhay.github.io/amor-lineribus-angular/',
+    publicPath: 'http://localhost:4201/',
     scriptType: 'text/javascript',
   },
   optimization: {

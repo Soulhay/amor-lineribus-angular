@@ -51,7 +51,7 @@
 								}
 							],
 							"outputHashing": "all",
-							"extraWebpackConfig": "webpack.prodF.config.js"
+							"extraWebpackConfig": "webpack.prod.config.js"
 						},
 						"development": {
 							"buildOptimizer": false,
